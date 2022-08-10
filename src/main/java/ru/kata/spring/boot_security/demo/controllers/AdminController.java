@@ -36,7 +36,7 @@ public class AdminController {
     public String showAll(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         String username = userDetails.getUsername();
         model.addAttribute("users", userService.getAllUsers());
-        model.addAttribute("user", userService.findByEmail(username));
+        model.addAttribute("user", userService.getUserByUsername(username));
         model.addAttribute("roles", userService.getAllRoles());
         model.addAttribute("newUser", new User());
         return "admin/admin";
@@ -48,7 +48,7 @@ public class AdminController {
         user.setRoles(userService.getByName(roles));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userService.saveUser(user);
-        return "redirect:admin/admin";
+        return "redirect:/admin";
     }
 
     @PatchMapping("/edit/{id}")
@@ -57,13 +57,13 @@ public class AdminController {
         user.setRoles(userService.getByName(roles));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userService.updateUser(id, user);
-        return "redirect:/admin/admin";
+        return "redirect:/admin";
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
         userService.removeUser(id);
-        return "redirect:admin/admin";
+        return "redirect:/admin";
     }
 
 }
