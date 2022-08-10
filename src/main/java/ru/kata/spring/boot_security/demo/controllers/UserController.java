@@ -23,8 +23,6 @@ public class UserController {
     public String user(ModelMap model, Principal principal) {
         User user = userService.findByEmail(principal.getName());
         model.addAttribute("user", user);
-        System.out.println(user);
-        System.out.println(principal.getName());
-        return "user/show";
+        return "user/user";
     }
 }
