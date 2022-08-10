@@ -37,64 +37,33 @@ public class AdminController {
         String username = userDetails.getUsername();
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("user", userService.findByEmail(username));
-        model.addAttribute("roles", userService.getSetOfRoles());
+        model.addAttribute("roles", userService.getAllRoles());
         model.addAttribute("newUser", new User());
         return "admin";
     }
 
-    @GetMapping("/{id}")
-    public String info(@PathVariable("id") Long id, ModelMap model) {
-        model.addAttribute("users", userService.getUser(id));
-        return "admin/show";
-    }
-
-    @GetMapping("/new")
-    public String addNewUser(ModelMap model, User user) {
-        model.addAttribute("users", new User());
-        model.addAttribute("roles", roleRepository.findAll());
-        return "admin/new";
-    }
-
     @PostMapping("/new")
-    private String createUser(@ModelAttribute("users") User user,
-                              @RequestParam("roles") List<String> role) {
-        List<Role> roles = userService.getSetOfRoles(role);
-        user.setRoles(roles);
+    public String createUser(@ModelAttribute("user") User user,
+                             @RequestParam(value = "nameRoles", required = false) String roles) {
+        user.setRoles(userService.getByName(roles));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userService.saveUser(user);
         return "redirect:/admin";
-
     }
 
-    @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("roles", roleRepository.findAll());
-        model.addAttribute("user", userService.getUser(id));
-        return "admin/edit";
-    }
-
-    @PostMapping("/{id}")
-    public String update(@ModelAttribute("user") User user,
-                         @PathVariable("id") long id,
-                         @RequestParam("roleList") List<String> role) {
-//        if (user.getEmail().equals(userService.getUser(user.getId()).getEmail())) {
-//            if (bindingResult.hasErrors())
-//                return "/{id}/edit";
-//        }
-        System.out.println("BEGIN");
-        if (!user.getPassword().equals(userService.getUser(user.getId()).getPassword())) {
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        }
-        user.setRoles(userService.getSetOfRoles(role));
+    @PatchMapping("/edit/{id}")
+    public String addNewUser(@ModelAttribute("user") User user, @PathVariable("id") int id,
+                             @RequestParam(value = "nameRoles", required = false) String roles) {
+        user.setRoles(userService.getByName(roles));
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userService.updateUser(id, user);
         return "redirect:/admin";
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") Long id) {
+    public String delete(@PathVariable("id") int id) {
         userService.removeUser(id);
         return "redirect:/admin";
-
     }
 
 }
