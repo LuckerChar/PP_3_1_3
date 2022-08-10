@@ -30,6 +30,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @PersistenceContext
     EntityManager entityManager;
 
+    @Override
+    public User getUser(Long id) {
+        return userRepository.getById((long) Math.toIntExact(id));
+    }
+
     @Transactional
     @Override
     public void saveUser(User user) {
@@ -61,8 +66,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public Set<Role> getAllRoles() {
-        Set<Role> roles = new HashSet<>(roleRepository.findAll());
-        return roles;
+        return new HashSet<>(roleRepository.findAll());
     }
 
     @Override
@@ -70,11 +74,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         TypedQuery<Role> query = entityManager.createQuery("select role from Role role where role.name = :name", Role.class);
         query.setParameter("name", name);
         return query.getResultStream().collect(Collectors.toSet());
-    }
-
-    @Override
-    public User getUser(Long id) {
-        return userRepository.getById((long) Math.toIntExact(id));
     }
 
     @Override
