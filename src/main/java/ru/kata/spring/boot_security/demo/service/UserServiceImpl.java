@@ -1,8 +1,6 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,7 +11,11 @@ import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -60,14 +62,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.findAll();
     }
 
+    @Override
+    public Set<Role> getAllRoles() {
+        Set<Role> roles = new HashSet<>(roleRepository.findAll());
+        return roles;
+    }
+
+    @PersistenceContext
+    EntityManager entityManager;
 
     @Override
-    public List<Role> getSetOfRoles(List<String> rolesId) {
-        List<Role> roleSet = new ArrayList<>();
-        for (String id : rolesId) {
-            roleSet.add(roleRepository.getRoleById(Long.parseLong(id)));
-        }
-        return roleSet;
+    public Set<Role> getByName(String name) {
+        TypedQuery<Role> query = entityManager.createQuery("select role from Role role where role.name = :name", Role.class);
+        query.setParameter("name", name);
+        return query.getResultStream().collect(Collectors.toSet());
     }
 
     @Override
