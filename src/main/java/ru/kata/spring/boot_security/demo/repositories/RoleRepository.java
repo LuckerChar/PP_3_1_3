@@ -8,7 +8,4 @@ import ru.kata.spring.boot_security.demo.models.Role;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
-    default Role getRoleById(long id) {
-        return this.getById(id);
-    }
 }

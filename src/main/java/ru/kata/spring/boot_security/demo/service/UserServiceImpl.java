@@ -27,11 +27,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }
+    @PersistenceContext
+    EntityManager entityManager;
 
     @Transactional
     @Override
     public void saveUser(User user) {
-        if (userRepository.findByEmail(user.getEmail()) != null) {
+        if (userRepository.findByUsername(user.getEmail()) != null) {
             throw new RuntimeException();
         }
         userRepository.save(user);
@@ -40,15 +42,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     @Override
     public void updateUser(long id, User user) {
-        if (userRepository.findByEmail(user.getEmail()) != null) {
+        if (userRepository.findByUsername(user.getEmail()) != null) {
             throw new RuntimeException();
         }
         userRepository.saveAndFlush(user);
-    }
-
-    @Override
-    public User getUser(long id) {
-        return userRepository.findById(id).get();
     }
 
     @Transactional
@@ -68,9 +65,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return roles;
     }
 
-    @PersistenceContext
-    EntityManager entityManager;
-
     @Override
     public Set<Role> getByName(String name) {
         TypedQuery<Role> query = entityManager.createQuery("select role from Role role where role.name = :name", Role.class);
@@ -79,14 +73,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    @Transactional
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public User getUser(Long id) {
+        return userRepository.getById((long) Math.toIntExact(id));
+    }
+
+    @Override
+    public User getUserByUsername(String email) {
+        return userRepository.findByUsername(email);
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByUsername(email);
         if (user == null) {
             throw new UsernameNotFoundException("USER NF");
         }

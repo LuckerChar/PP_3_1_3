@@ -12,8 +12,6 @@ public interface UserService {
 
     void updateUser(long id, User user);
 
-    User getUser(long id);
-
     void removeUser(long id);
 
     List<User> getAllUsers();
@@ -22,5 +20,7 @@ public interface UserService {
 
     Set<Role> getByName(String name);
 
-    User findByEmail(String name);
+    User getUser(Long id);
+
+    User getUserByUsername(String username);
 }

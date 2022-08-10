@@ -21,7 +21,7 @@ public class UserController {
 
     @GetMapping()
     public String user(ModelMap model, Principal principal) {
-        User user = userService.findByEmail(principal.getName());
+        User user = userService.getUserByUsername(principal.getName());
         model.addAttribute("user", user);
         return "user/user";
     }
