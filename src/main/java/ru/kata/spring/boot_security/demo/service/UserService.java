@@ -22,5 +22,5 @@ public interface UserService {
 
     User getUser(Long id);
 
-    User getUserByUsername(String username);
+    User getUserByUsername(String email);
 }
