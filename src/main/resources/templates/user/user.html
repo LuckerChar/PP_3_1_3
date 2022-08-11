@@ -71,7 +71,7 @@
                   <td th:text="${user.getFirstName()}">VALUE</td>
                   <td th:text="${user.getLastName()}">VALUE</td>
                   <td th:text="${user.getAge()}">VALUE</td>
-                  <td th:text="${user.getUsername()}">VALUE</td>
+                  <td th:text="${user.getEmail()}">VALUE</td>
                   <td><a th:each="role : ${user.getRoles()}" th:text="${role.name} + ' '"></a></td>
                   </tr>
                   </tbody>

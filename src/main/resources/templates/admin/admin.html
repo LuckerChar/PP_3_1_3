@@ -17,7 +17,7 @@
 <nav class="navbar navbar-dark bg-dark">
   <div class="container-fluid">
     <form class="form-inline">
-      <b><span class="navbar-text-xl text-white" th:text="${user.username}"></span></b>
+      <b><span class="navbar-text-xl text-white" th:text="${user.email}"></span></b>
       <span class="navbar-text-xl text-white">&nbsp with roles: &nbsp</span>
       <span class="navbar-text-xl text-white" th:each="role : ${user.getRoles()}" th:text="${role.name} + ' '"></span>
     </form>
