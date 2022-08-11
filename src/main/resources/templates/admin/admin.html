@@ -89,7 +89,7 @@
                   <td th:text="${user.firstName}"></td>
                   <td th:text="${user.lastName}"></td>
                   <td th:text="${user.age}"></td>
-                  <td th:text="${user.username}"></td>
+                  <td th:text="${user.email}"></td>
                   <td><a th:each="role : ${user.getRoles()}" th:text="${role.name} + ' '"></a></td>
 
                   <!-- Edit-->
@@ -143,7 +143,7 @@
 
                                   <strong><label
                                           for="eUsername">Email</label></strong>
-                                  <input type="email" class="form-control"
+                                  <input type="text" class="form-control"
                                          th:value="${user.email}" id="eUsername"
                                          name="username"
                                          required minlength="1" maxlength="50">
@@ -245,7 +245,7 @@
 
                                   <br/>
                                   <input type="text" class="form-control"
-                                         th:value="${user.username}" id="dUsername"
+                                         th:value="${user.email}" id="dUsername"
                                          name="username" readonly>
 
                                   <br/>
@@ -317,7 +317,7 @@
                     <strong><label for="aUsername">Email</label></strong>
                     <br/>
 
-                    <input type="text" class="form-control" th:field="*{username}" id="aUsername"
+                    <input type="text" class="form-control" th:field="*{email}" id="aUsername"
                            placeholder="Username" required minlength="1" maxlength="50">
                     <br/>
                     <strong><label for="aPassword">Password</label></strong>
